@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Publiez un article</h1>
+
+    {{ form_start(formArticle) }}
+
+    {{ form_row(formArticle.title,
+        {'attr': {'placeholder': "Titre de l'article" }}) }}
+    {{ form_row(formArticle.category) }}
+    {{ form_row(formArticle.content,
+        {'attr': {'placeholder': "Contenu de l'article" }}) }}
+    {{ form_row(formArticle.image,
+        {'attr': {'placeholder': "Image de l'article"}}) }}
+
+
+    <button type="submit" class="px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-600 rounded-md dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700">
+        {% if editMode %}
+        Enregistrer les modifications
+        {% else %}
+        Ajouter l'article
+        {% endif %}
+    </button>
+    {{ form_end(formArticle) }}
+
+{% endblock %}
