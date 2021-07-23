@@ -14,9 +14,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\Slugify;
 
 class BlogController extends AbstractController
 {
+    private $slugify;
+
+    public function __construct(Slugify $slugify)
+    {
+        $this->slugify = $slugify;
+    }
+
+
     /**
      * @Route("/blog", name="blog")
      */
@@ -39,7 +48,7 @@ class BlogController extends AbstractController
 
     /**
      * @Route("/blog/new", name="blog_new")
-     * @Route("/blog/{id}/edit", name="blog_edit")
+     * @Route("/blog/{slug}/edit", name="blog_edit")
      */
     public function form(Article $article = null, Request $request, EntityManagerInterface $manager) {
 
@@ -52,13 +61,15 @@ class BlogController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            //if($article->getId()) {
-                $article->setCreatedAt((new \DateTime()));
-            //}
+            $slug = $this->slugify->generate($article->getTitle());
+            $article->setSlug($slug);
+
+            $article->setCreatedAt((new \DateTime()));
+
             $manager->persist($article);
             $manager->flush();
 
-            return $this->redirectToRoute('blog_show', ['id' => $article->getId()]);
+            return $this->redirectToRoute('blog_show', ['slug' => $article->getSlug()]);
         }
 
 
@@ -69,7 +80,7 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/blog/{slug}", name="blog_show", methods={"GET"})
+     * @Route("/blog/{slug}", name="blog_show")
      * @param Article $article
      */
     public function show(Article $article, Request $request, EntityManagerInterface $manager) {

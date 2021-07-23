@@ -23,9 +23,15 @@
                             <div class="w-12 h-1 bg-indigo-500 rounded mt-2 mb-4"></div>
                             <p class="text-base">Raclette knausgaard hella meggs normcore williamsburg enamel pin sartorial venmo tbh hot chicken gentrify portland.</p>
                         </div>
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                    </br><a class="block w-1/2 px-3 py-2 mx-1 text-sm font-medium leading-5 text-center text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-600 md:mx-0 md:w-auto" href="{{ path('blog_edit', {'slug': article.slug}) }}">Editer l'article</a>
+
+                        {% endif %}
+
                     </div>
                     <div class="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
-                        <p class="leading-relaxed text-lg mb-4">{{article.content}}</p>
+                        <p class="leading-relaxed text-lg mb-4">{{article.content | raw}}</p>
 
                     </div>
                 </div>
