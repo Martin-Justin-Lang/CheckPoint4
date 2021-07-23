@@ -69,7 +69,8 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/blog/{id}", name="blog_show")
+     * @Route("/blog/{slug}", name="blog_show", methods={"GET"})
+     * @param Article $article
      */
     public function show(Article $article, Request $request, EntityManagerInterface $manager) {
         $comment = new Comment();
@@ -84,7 +85,7 @@ class BlogController extends AbstractController
             $manager->persist($comment);
             $manager->flush();
 
-            return $this->redirectToRoute('blog_show', ['id' => $article->getId()]);
+            return $this->redirectToRoute('blog_show', ['slug' => $article->getSlug()]);
         }
         return $this->render('blog/show.html.twig', [
             'article' => $article,

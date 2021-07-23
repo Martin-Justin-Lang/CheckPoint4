@@ -2,7 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Service\Slugify;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Article;
 use App\Entity\Category;
@@ -11,6 +13,13 @@ use App\Entity\Comment;
 
 class ArticleFixtures extends Fixture
 {
+    private $slugify;
+
+    public function __construct(Slugify $slugify)
+    {
+        $this->slugify = $slugify;
+    }
+
     public function load(ObjectManager $manager)
     {
 
@@ -36,6 +45,9 @@ class ArticleFixtures extends Fixture
                     ->setImage($faker->imageUrl())
                     ->setCreatedAt($faker->dateTimeBetween('-6 months'))
                     ->setCategory($category);
+
+                $slug = $this->slugify->generate($article->getTitle());
+                $article->setSlug($slug);
 
                 $manager->persist($article);
 
