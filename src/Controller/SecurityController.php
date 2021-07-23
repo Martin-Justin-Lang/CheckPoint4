@@ -51,4 +51,11 @@ class SecurityController extends AbstractController
      */
     public function logout() {
     }
+
+    /**
+     * @Route("/forget", name="security_forget")
+     */
+    public function forget() {
+        return $this->render('security/forget.html.twig');
+    }
 }
